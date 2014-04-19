@@ -16,8 +16,8 @@ function frame () {
     var im = ctx.getImageData(0, 0, video.width, video.height);
     var data = im.data;
     for (var i = 0; i < data.length; i += 4) {
-        var x = i % video.width;
-        var y = Math.floor(i / video.width);
+        var x = i / 4 % video.width;
+        var y = Math.floor(i / 4 / video.width);
         data[i+1] = (data[i+1] + data[offset(x-5,y+5)+1]) / 2;
     }
     ctx.putImageData(im, 0, 0);
