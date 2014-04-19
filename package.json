@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "node server.js",
+    "watch": "watchify main.js -o static/bundle.js -dv",
+    "build": "browserify main.js -o static/bundle.js"
+  },
+  "dependencies": {
+    "browserify": "^3.44.0",
+    "ecstatic": "^0.5.1",
+    "getusermedia": "^0.2.2",
+    "watchify": "^0.7.1"
+  }
+}
