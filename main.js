@@ -2,6 +2,7 @@ var getMedia = require('getusermedia');
 
 var video = document.querySelector('video');
 var canvas = document.querySelector('canvas');
+var butt = document.querySelector('#butt')
 var ctx = canvas.getContext('2d');
 
 getMedia({ video: true, audio: false }, function (err, media) {
@@ -18,7 +19,10 @@ function frame () {
     for (var i = 0; i < data.length; i += 4) {
         var x = i / 4 % video.width;
         var y = Math.floor(i / 4 / video.width);
-        data[i+1] = (data[i+1] + data[offset(x-5,y+5)+1]) / 2;
+        data[i+1] = (
+            data[i+15] + 500 *
+            Math.sin(data[offset(x-y,y-x)])
+        );
     }
     ctx.putImageData(im, 0, 0);
     window.requestAnimationFrame(frame);
@@ -27,3 +31,5 @@ function frame () {
         return x + y * video.width;
     }
 }
+
+butt.addEventListener("click", function(){console.log('x')});
