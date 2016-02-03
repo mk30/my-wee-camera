@@ -36,19 +36,14 @@ function frame () {
 }
 
 butt.addEventListener("click", function(){
-    if (typeof canvas.toBlob !== "undefined"){
-        canvas.toBlob(function(blob){
-            console.log('x');
-            /*
-            var buf = new Buffer(FileReader.readAsArrayBuffer(blob));
-            var w = store.createWriteStream(function (err, meta) {
-                db.put(meta.key, {time: Date.now()}, function (err){
-                    if (err) return console.log('Ooops!', err)
-                });
-            });
-            w.end(buf);
-            */
-        })
-    }
-    else {console.log(canvas.toBlob())};
+    var x = canvas.toDataURL();
+    var y = x.replace(/^.+,/g, "")
+    console.log(y);
+    var buf = Buffer(y, 'base64');
+    var w = store.createWriteStream(function (err, meta) {
+        db.put(meta.key, {time: Date.now()}, function (err){
+            if (err) return console.log('Ooops!', err)
+        });
+    });
+    w.end(buf);
 });
