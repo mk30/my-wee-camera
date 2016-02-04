@@ -1,12 +1,14 @@
 var getMedia = require('getusermedia');
 var video = document.querySelector('video');
 var canvas = document.querySelector('canvas');
-var butt = document.querySelector('#butt');
+var capture = document.querySelector('#capture');
+var show = document.querySelector('#show');
 var ctx = canvas.getContext('2d');
 var level = require('level-browserify');
 var db = level('album', { valueEncoding: 'json' });
 var blobstore = require('idb-content-addressable-blob-store');
 var store = blobstore();
+var through = require('through');
 
 getMedia({ video: true, audio: false }, function (err, media) {
     if (err) return console.error(err);
@@ -35,7 +37,7 @@ function frame () {
     }
 }
 
-butt.addEventListener("click", function(){
+capture.addEventListener("click", function(){
     var x = canvas.toDataURL();
     var y = x.replace(/^.+,/g, "")
     console.log(y);
@@ -47,3 +49,14 @@ butt.addEventListener("click", function(){
     });
     w.end(buf);
 });
+
+show.addEventListener("click", function(){
+    db.createReadStream().pipe(through(write, end));
+    function write (buf) {
+        console.log(buf);
+    }
+    function end () {
+        console.log('__END__');
+    }
+});
+
