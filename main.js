@@ -9,6 +9,7 @@ var db = level('album', { valueEncoding: 'json' });
 var blobstore = require('idb-content-addressable-blob-store');
 var store = blobstore();
 var through = require('through');
+var collect = require('collect-stream');
 
 getMedia({ video: true, audio: false }, function (err, media) {
     if (err) return console.error(err);
@@ -54,9 +55,15 @@ show.addEventListener("click", function(){
     db.createReadStream().pipe(through(write, end));
     function write (buf) {
         console.log(buf);
+        var bufstream = store.createReadStream(buf.key);
+        collect ( bufstream, function(err, data){
+            if (err) {
+                console.log(err)
+            }
+            else {console.log(data);}
+        });
     }
     function end () {
         console.log('__END__');
     }
 });
-
