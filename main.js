@@ -60,7 +60,17 @@ show.addEventListener("click", function(){
             if (err) {
                 console.log(err)
             }
-            else {console.log(data);}
+            else { 
+                var halfurl = data.toString('base64');
+                var url = (
+                    "data:image/jpeg;base64," + halfurl
+                );
+                var img = document.createElement('img');
+                img.src = url;
+                console.log(url);
+                document.body.appendChild(img);
+            }
+            //else {document.createElement(data}
         });
     }
     function end () {
