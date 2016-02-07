@@ -5,12 +5,12 @@ var capture = document.querySelector('#capture');
 var show = document.querySelector('#show');
 var ctx = canvas.getContext('2d');
 var level = require('level-browserify');
-var db = level('./data', { valueEncoding: 'json' });
+var db = level('album', { valueEncoding: 'json' });
 //window.db = db;
 //var blobstore = require('idb-content-addressable-blob-store');
 //var store = blobstore();
 var through = require('through');
-var collect = require('collect-stream');
+//var collect = require('collect-stream');
 
 getMedia({ video: true, audio: false }, function (err, media) {
     if (err) return console.error(err);
@@ -64,6 +64,13 @@ show.addEventListener("click", function(){
     db.createReadStream().pipe(through(write, end));
     function write (buf) {
         console.log(buf);
+        var url = (
+            "data:image/jpeg;base64," + buf.value 
+        );
+        var img = document.createElement('img');
+        img.src = url;
+        //console.log(url);
+        document.body.appendChild(img);
         //var bufstream = store.createReadStream(buf.key);
         //console.log(bufstream); <=does not work
         //console.log(buf.key); <= works
