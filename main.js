@@ -6,6 +6,7 @@ var show = document.querySelector('#show');
 var ctx = canvas.getContext('2d');
 var level = require('level-browserify');
 var db = level('album', { valueEncoding: 'json' });
+window.db = db;
 var blobstore = require('idb-content-addressable-blob-store');
 var store = blobstore();
 var through = require('through');
@@ -41,21 +42,25 @@ function frame () {
 capture.addEventListener("click", function(){
     var x = canvas.toDataURL();
     var y = x.replace(/^.+,/g, "")
-    console.log(y);
+    //console.log(y);
     var buf = Buffer(y, 'base64');
     var w = store.createWriteStream(function (err, meta) {
         db.put(meta.key, {time: Date.now()}, function (err){
-            if (err) return console.log('Ooops!', err)
+            if (err) return console.log('Ooops!', err);
+            //console.log('put success'); <=passes
         });
     });
     w.end(buf);
+    //console.log(buf); <=this works
 });
 
 show.addEventListener("click", function(){
     db.createReadStream().pipe(through(write, end));
     function write (buf) {
-        console.log(buf);
+        //console.log(buf);
         var bufstream = store.createReadStream(buf.key);
+        //console.log(bufstream); <=does not work
+        //console.log(buf.key); <= works
         collect ( bufstream, function(err, data){
             if (err) {
                 console.log(err)
