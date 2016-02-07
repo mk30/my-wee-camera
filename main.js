@@ -44,12 +44,16 @@ capture.addEventListener("click", function(){
     var y = x.replace(/^.+,/g, "")
     //console.log(y);
     var buf = Buffer(y, 'base64');
+    console.log(buf);
+    var w = db.put(meta.key, buf, {'valueEncoding':binary}); 
+    /*
     var w = store.createWriteStream(function (err, meta) {
         db.put(meta.key, {time: Date.now()}, function (err){
             if (err) return console.log('Ooops!', err);
             //console.log('put success'); <=passes
         });
     });
+    */
     w.end(buf);
     //console.log(buf); <=this works
 });
