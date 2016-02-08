@@ -6,11 +6,7 @@ var show = document.querySelector('#show');
 var ctx = canvas.getContext('2d');
 var level = require('level-browserify');
 var db = level('album', { valueEncoding: 'json' });
-//window.db = db;
-//var blobstore = require('idb-content-addressable-blob-store');
-//var store = blobstore();
 var through = require('through');
-//var collect = require('collect-stream');
 
 getMedia({ video: true, audio: false }, function (err, media) {
     if (err) return console.error(err);
@@ -42,22 +38,9 @@ function frame () {
 capture.addEventListener("click", function(){
     var x = canvas.toDataURL();
     var y = x.replace(/^.+,/g, "")
-    //console.log(y);
-    //var buf = Buffer(y, 'base64');
-    //console.log(buf);
     var w = db.put(new Date().toISOString(), y, function(){
         console.log('yelp');
     }); 
-    /*
-    var w = store.createWriteStream(function (err, meta) {
-        db.put(meta.key, {time: Date.now()}, function (err){
-            if (err) return console.log('Ooops!', err);
-            //console.log('put success'); <=passes
-        });
-    });
-    w.end(buf);
-    */
-    //console.log(buf); <=this works
 });
 
 show.addEventListener("click", function(){
@@ -69,29 +52,7 @@ show.addEventListener("click", function(){
         );
         var img = document.createElement('img');
         img.src = url;
-        //console.log(url);
         document.body.appendChild(img);
-        //var bufstream = store.createReadStream(buf.key);
-        //console.log(bufstream); <=does not work
-        //console.log(buf.key); <= works
-        /*
-        collect ( bufstream, function(err, data){
-            if (err) {
-                console.log(err)
-            }
-            else { 
-                var halfurl = data.toString('base64');
-                var url = (
-                    "data:image/jpeg;base64," + halfurl
-                );
-                var img = document.createElement('img');
-                img.src = url;
-                console.log(url);
-                document.body.appendChild(img);
-            }
-            //else {document.createElement(data}
-        });
-        */
     }
     function end () {
         console.log('__END__');
