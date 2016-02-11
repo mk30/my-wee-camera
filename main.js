@@ -2,7 +2,9 @@ var main = require("main-loop")
 var h = require("virtual-dom/h")
 var getMedia = require('getusermedia');
 var video = document.querySelector('video');
-var canvas = document.querySelector('canvas');
+var canvas = document.createElement('canvas');
+canvas.width = video.width;
+canvas.height = video.height;
 var capture = document.querySelector('#capture');
 var show = document.querySelector('#show');
 var ctx = canvas.getContext('2d');
@@ -14,43 +16,22 @@ getMedia({ video: true, audio: false }, function (err, media) {
   if (err) return console.error(err);
   video.src = window.URL.createObjectURL(media);
   video.play();
-  frame();
 });
-
-function frame () {
-  ctx.drawImage(video, 0, 0, video.width, video.height);
-  var im = ctx.getImageData(0, 0, video.width, video.height);
-  var data = im.data;
-  for (var i = 0; i < data.length; i += 4) {
-    var x = i / 4 % video.width;
-    var y = Math.floor(i / 4 / video.width);
-    data[i+1] = (
-      data[i+15] + 500 *
-      Math.sin(data[offset(x-y,y-x)])
-    );
-  }
-  ctx.putImageData(im, 0, 0);
-  window.requestAnimationFrame(frame);
-
-  function offset (x, y) {
-    return x + y * video.width;
-  }
-}
 
 var initState = {photos: []}
 
 // set up a loop
-var loop = mainLoop(initState, render, require("virtual-dom"));
+var loop = main(initState, render, require("virtual-dom"));
 
 document.body.appendChild(loop.target)
 
-
 function render (state) {
-  var dataurl = canvas.toDataURL();
-  var data = dataurl.replace(/^.+,/g, "");
-  var time = new Date().toISOString();
   function onclick () {
-    var w = db.put(date, data, function(){
+    ctx.drawImage(video, 0, 0, video.width, video.height);
+    var dataurl = canvas.toDataURL();
+    var data = dataurl.replace(/^.+,/g, "");
+    var time = new Date().toISOString();
+    var w = db.put(time, data, function(){
       console.log('screenshot captured');
     }); 
     loop.state.photos.push({
@@ -58,10 +39,19 @@ function render (state) {
       'data': data
     });
     loop.update(loop.state);
+    console.log(loop.state);
   }
   return h('div', [
     h('h1', 'hello'),
-    h('button', { onclick: onclick }, 'take a picture')
+    h('button', { onclick: onclick }, 'take a picture'),
+    h('div', state.photos.map(function(p){
+      return h('div', [
+        h('img', { src: 'data:image/jpeg;base64,' + p.data
+        }),
+        h('div', 'datA: ' + p.data),
+        h('div', 'date: ' + p.time)
+      ])
+    }))
   ]);
 }
 
