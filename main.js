@@ -39,7 +39,7 @@ function render (state) {
       'data': data
     });
     loop.update(loop.state);
-    console.log(loop.state);
+    //console.log(loop.state);
   }
   return h('div', [
     h('h1', 'hello'),
@@ -55,37 +55,15 @@ function render (state) {
   ]);
 }
 
-
-
-
-
-/*
-
-function render(state) {
-    return h("div", [
-        h("div", [
-            h("span", "hello "),
-            h("img", 
-        ]),
-        h("ul", state.fruits.map(renderFruit))
-    ])
-
-    function renderFruit(fruitName) {
-        return h("li", [
-            h("span", fruitName)
-        ])
-    }
+db.createReadStream().pipe(through(write, end));
+function write (data) {
+  console.log(data.key, data.value);
+  loop.state.photos.push({
+    'time': data.key,
+    'data': data.value
+  });
+  loop.update(loop.state);
 }
-
-
-// update the loop with the new application state
-loop.update({
-    fruits: ["apple", "banana", "cherry"],
-    name: "Steve"
-})
-loop.update({
-    fruits: ["apple", "banana", "cherry"],
-    name: "Stevie"
-})
-
-*/
+function end () {
+  console.log('__END__');
+} 
