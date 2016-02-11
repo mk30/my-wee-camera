@@ -20,7 +20,6 @@ getMedia({ video: true, audio: false }, function (err, media) {
 
 var initState = {photos: []}
 
-// set up a loop
 var loop = main(initState, render, require("virtual-dom"));
 
 document.body.appendChild(loop.target)
@@ -39,7 +38,6 @@ function render (state) {
       'data': data
     });
     loop.update(loop.state);
-    //console.log(loop.state);
   }
   return h('div', [
     h('h1', 'hello'),
@@ -48,7 +46,6 @@ function render (state) {
       return h('div', [
         h('img', { src: 'data:image/jpeg;base64,' + p.data
         }),
-        h('div', 'datA: ' + p.data),
         h('div', 'date: ' + p.time)
       ])
     }))
