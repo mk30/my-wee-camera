@@ -26,13 +26,11 @@ document.body.appendChild(loop.target)
 
 function render (state) {
   function onclick () {
-    ctx.drawImage(video, 0, 0, 300, 300);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     var dataurl = canvas.toDataURL();
     var data = dataurl.replace(/^.+,/g, "");
-    console.log(canvas.toDataURL());
     var time = new Date().toISOString();
     var w = db.put(time, data, function(){
-      console.log('screenshot captured');
     }); 
     loop.state.photos.push({
       'time': time,
@@ -42,10 +40,13 @@ function render (state) {
   }
   return h('div', [
     h('video', {
+      width: 300,
+      height: 200, 
       hook: function (elem){
         if (video) return; 
         video = elem;
         createVideo(video);
+        console.log(video.width, video.height);
         canvas.width = video.width;
         canvas.height = video.height;
       }
