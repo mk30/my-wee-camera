@@ -38,21 +38,22 @@ function render (state) {
     });
     loop.update(loop.state);
   }
-  return h('div', [
-    h('video', {
-      width: 300,
-      height: 200, 
-      hook: function (elem){
-        if (video) return; 
-        video = elem;
-        createVideo(video);
-        console.log(video.width, video.height);
-        canvas.width = video.width;
-        canvas.height = video.height;
-      }
-    }),
-    h('h1', 'hello'),
-    h('button', { onclick: onclick }, 'take a picture'),
+  return h('div#wrapper', [
+    h('div#left', [
+      h('video', {
+        width: 300,
+        height: 200, 
+        hook: function (elem){
+          if (video) return; 
+          video = elem;
+          createVideo(video);
+          console.log(video.width, video.height);
+          canvas.width = video.width;
+          canvas.height = video.height;
+        }
+      }),
+      h('button', { onclick: onclick }, 'take a picture'),
+    ]),
     h('div', state.photos.map(function(p){
       return h('div', [
         h('img', { src: 'data:image/jpeg;base64,' + p.data
