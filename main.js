@@ -18,7 +18,10 @@ var createVideo = function (video) {
   });
 }
 
-var initState = {photos: []}
+var initState = {
+  photos: [], 
+  rightwidth: '200px'
+}
 
 var loop = main(initState, render, require("virtual-dom"));
 
@@ -38,8 +41,14 @@ function render (state) {
     });
     loop.update(loop.state);
   }
-  return h('div#wrapper', [
-    h('div#left', [
+  return h('div#wrapper', {
+    style:{width: window.innerWidth}
+    }, [
+    h('div#left', {
+      style: {
+        width: state.rightwidth
+      }
+    }, [
       h('video', {
         width: 300,
         height: 200, 
@@ -47,20 +56,22 @@ function render (state) {
           if (video) return; 
           video = elem;
           createVideo(video);
-          console.log(video.width, video.height);
           canvas.width = video.width;
           canvas.height = video.height;
         }
       }),
+      h('br'),
       h('button', { onclick: onclick }, 'take a picture'),
     ]),
-    h('div', state.photos.map(function(p){
-      return h('div', [
-        h('img', { src: 'data:image/jpeg;base64,' + p.data
-        }),
-        h('div', 'date: ' + p.time)
-      ])
-    }))
+    h('div#right', {style : {width: state.rightwidth } }, [
+      h('div', state.photos.map(function(p){
+        return h('div', [
+          h('img', { src: 'data:image/jpeg;base64,' + p.data
+          }),
+          h('div', 'date: ' + p.time)
+        ])
+      }))
+    ])  
   ]);
 }
 
