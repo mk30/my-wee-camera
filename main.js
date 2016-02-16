@@ -40,6 +40,9 @@ function render (state) {
       'data': data
     });
     loop.update(loop.state);
+  };
+  function camview () {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
   return h('div#wrapper', [
     h('div#top', {
@@ -82,6 +85,9 @@ function render (state) {
         h('button', { 
           onclick: onclick,
         }, 'take a picture'),
+        h('button', { 
+          onclick: camview,
+        }, 'return to camera view'),
       ]),
     ]),
     h('div#right', {style : {width: state.rightwidth } }, [
