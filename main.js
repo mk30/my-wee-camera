@@ -20,7 +20,7 @@ var createVideo = function (video) {
 
 var initState = {
   photos: [], 
-  rightwidth: 200
+  rightwidth: 300
 }
 
 var loop = main(initState, render, require("virtual-dom"));
@@ -42,15 +42,28 @@ function render (state) {
     loop.update(loop.state);
   }
   return h('div#wrapper', [
+    h('div#top', {
+      style: {
+        width: '100%',
+        'border-bottom': '1px solid #000000',
+        background: 'Lavender'
+      }
+    }, [
+      'my wee camera'
+
+    ]),
     h('div#left', {
       style: {
         width: 
-          window.innerWidth - state.rightwidth- 30
+          window.innerWidth - state.rightwidth- 20
       }
     }, [
       h('video', {
         width: 600,
         height: 400, 
+        style: {
+          'padding': '10px',
+        },
         hook: function (elem){
           if (video) return; 
           video = elem;
@@ -59,9 +72,17 @@ function render (state) {
           canvas.height = video.height;
         }
       }),
-      h('button', { 
-        onclick: onclick,
-      }, 'take a picture'),
+      h('div', {
+        style: {
+          'clear': 'both',
+          'width': '100%',
+          'padding': '10px'
+        },
+      }, [
+        h('button', { 
+          onclick: onclick,
+        }, 'take a picture'),
+      ]),
     ]),
     h('div#right', {style : {width: state.rightwidth } }, [
       h('div', state.photos.map(function(p){
