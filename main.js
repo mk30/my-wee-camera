@@ -28,7 +28,7 @@ var loop = main(initState, render, require("virtual-dom"));
 document.body.appendChild(loop.target)
 
 function render (state) {
-  function onclick () {
+  function takepic () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     var dataurl = canvas.toDataURL();
     var data = dataurl.replace(/^.+,/g, "");
@@ -83,7 +83,7 @@ function render (state) {
         },
       }, [
         h('button', { 
-          onclick: onclick,
+          onclick: takepic,
         }, 'take a picture'),
         h('button', { 
           onclick: camview,
