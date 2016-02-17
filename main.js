@@ -47,6 +47,22 @@ function render (state) {
   function picview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
+  function rendercam () {
+    return h('video', {
+      width: 600,
+      height: 400, 
+      style: {
+        'padding': '10px',
+      },
+      hook: function (elem){
+        if (video) return; 
+        video = elem;
+        createVideo(video);
+        canvas.width = video.width;
+        canvas.height = video.height;
+      }
+    })
+  }
   return h('div#wrapper', [
     h('div#top', {
       style: {
@@ -64,20 +80,7 @@ function render (state) {
           window.innerWidth - state.rightwidth- 20
       }
     }, [
-      h('video', {
-        width: 600,
-        height: 400, 
-        style: {
-          'padding': '10px',
-        },
-        hook: function (elem){
-          if (video) return; 
-          video = elem;
-          createVideo(video);
-          canvas.width = video.width;
-          canvas.height = video.height;
-        }
-      }),
+      rendercam (),
       h('div', {
         style: {
           'clear': 'both',
