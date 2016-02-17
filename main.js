@@ -44,6 +44,9 @@ function render (state) {
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
+  function picview () {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  }
   return h('div#wrapper', [
     h('div#top', {
       style: {
