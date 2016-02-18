@@ -27,3 +27,8 @@ html, body{
   'width': '100%',
   'padding': '10px' 
 }
+#picview{
+  'width': '600px',
+  'height': '400px',
+  'padding': '10px'
+}

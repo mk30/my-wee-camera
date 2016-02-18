@@ -17,15 +17,17 @@ var createVideo = function (video) {
     video.play();
   });
 }
+/*
 var displaymodes = {
   camera: function () {},
   display: function () {}
 }
+*/
 
 var initState = {
   photos: [], 
   rightwidth: 300,
-  displaymode: 'camera'
+  displaymode: 'a'
 }
 
 var loop = main(initState, render, require("virtual-dom"));
@@ -33,6 +35,8 @@ var loop = main(initState, render, require("virtual-dom"));
 document.body.appendChild(loop.target)
 
 function render (state) {
+  
+
   function takepic () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     var dataurl = canvas.toDataURL();
@@ -50,7 +54,13 @@ function render (state) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
   function picview () {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    console.log('picview');
+    return h('div#picview', {}, [
+      h('a', {href: ''}, [
+        h('img', {src: ''} 
+        ),
+      ]),
+    ])
   }
   function rendercam () {
     return h('video', {
@@ -78,7 +88,7 @@ function render (state) {
           window.innerWidth - state.rightwidth- 20
       }
     }, [
-      rendercam (),
+      state.displaymode == 'camera' ? rendercam () : picview() ,
       h('div#buttons', { }, [
         h('button', { 
           onclick: takepic,
