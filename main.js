@@ -27,7 +27,7 @@ var displaymodes = {
 var initState = {
   photos: [], 
   rightwidth: 300,
-  displaymode: 'a'
+  displaymode: 'camera'
 }
 
 var loop = main(initState, render, require("virtual-dom"));
@@ -35,8 +35,6 @@ var loop = main(initState, render, require("virtual-dom"));
 document.body.appendChild(loop.target)
 
 function render (state) {
-  
-
   function takepic () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     var dataurl = canvas.toDataURL();
@@ -53,15 +51,15 @@ function render (state) {
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
-  function picview () {
-    console.log('picview');
-    return h('div#picview', {}, [
-      h('a', {href: ''}, [
-        h('img', {src: ''} 
-        ),
+  function picview (p) {
+    return function () { h('div#picview', {}, [
+      h('a', {href: '#'}, [
+        h('img', {src:  
+          'data:image/jpeg;base64,' + p.data
+        }),
       ]),
     ])
-  }
+  }}
   function rendercam () {
     return h('video', {
       width: 600,
@@ -88,7 +86,7 @@ function render (state) {
           window.innerWidth - state.rightwidth- 20
       }
     }, [
-      state.displaymode == 'camera' ? rendercam () : picview() ,
+      rendercam (),
       h('div#buttons', { }, [
         h('button', { 
           onclick: takepic,
@@ -101,13 +99,13 @@ function render (state) {
     h('div#right', {style : {width: state.rightwidth } }, [
       h('div', state.photos.map(function(p){
         return h('div', [
-          h('a', {href: 'data:image/jpeg;base64,' + p.data,
-}, [
+         // h('a', {href: 'data:image/jpeg;base64,' + p.data}, [
             h('img', { 
               src: 'data:image/jpeg;base64,' + p.data,
+              onclick: picview(p),
               style: {width: '100%'}
             }),
-          ]),
+          //]),
           h('div', 'date: ' + p.time)
         ])
       }))
