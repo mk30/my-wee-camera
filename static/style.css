@@ -8,6 +8,12 @@ html, body{
     margin: 0;
     background: LightBlue;
 }
+#top{
+  width: '100%',
+  'border-bottom': '1px solid #000000',
+  background: 'Lavender'
+
+}
 #left{
     float: left;
     clear: both;
@@ -16,4 +22,8 @@ html, body{
     float: left;
     background: PaleGreen;
 }
-
+#buttons{
+  'clear': 'both',
+  'width': '100%',
+  'padding': '10px' 
+}

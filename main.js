@@ -17,10 +17,15 @@ var createVideo = function (video) {
     video.play();
   });
 }
+var displaymodes = {
+  camera: function () {},
+  display: function () {}
+}
 
 var initState = {
   photos: [], 
-  rightwidth: 300
+  rightwidth: 300,
+  displaymode: 'camera'
 }
 
 var loop = main(initState, render, require("virtual-dom"));
@@ -64,15 +69,8 @@ function render (state) {
     })
   }
   return h('div#wrapper', [
-    h('div#top', {
-      style: {
-        width: '100%',
-        'border-bottom': '1px solid #000000',
-        background: 'Lavender'
-      }
-    }, [
+    h('div#top', { }, [
       'my wee camera'
-
     ]),
     h('div#left', {
       style: {
@@ -81,13 +79,7 @@ function render (state) {
       }
     }, [
       rendercam (),
-      h('div', {
-        style: {
-          'clear': 'both',
-          'width': '100%',
-          'padding': '10px'
-        },
-      }, [
+      h('div#buttons', { }, [
         h('button', { 
           onclick: takepic,
         }, 'take a picture'),
@@ -99,10 +91,13 @@ function render (state) {
     h('div#right', {style : {width: state.rightwidth } }, [
       h('div', state.photos.map(function(p){
         return h('div', [
-          h('img', { 
-            src: 'data:image/jpeg;base64,' + p.data,
-            style: {width: '100%'}
-          }),
+          h('a', {href: 'data:image/jpeg;base64,' + p.data,
+}, [
+            h('img', { 
+              src: 'data:image/jpeg;base64,' + p.data,
+              style: {width: '100%'}
+            }),
+          ]),
           h('div', 'date: ' + p.time)
         ])
       }))
