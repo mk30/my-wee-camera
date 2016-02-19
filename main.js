@@ -52,6 +52,7 @@ function render (state) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
   function picview (p) {
+  //the below does not work
     return function () { h('div#picview', {}, [
       h('a', {href: '#'}, [
         h('img', {src:  
