@@ -1,9 +1,9 @@
-var vdom = require('virtual-dom')
-var h = require('virtual-hyperscript-hook')(vdom.h)
-var main = require("main-loop")
+var vdom = require('virtual-dom');
+var h = require('virtual-hyperscript-hook')(vdom.h);
+var main = require("main-loop");
 var getMedia = require('getusermedia');
 var randombytes = require('randombytes');
-var video
+var video;
 var canvas = document.createElement('canvas');
 var capture = document.querySelector('#capture');
 var show = document.querySelector('#show');
@@ -27,7 +27,7 @@ var displaymodes = {
 */
 
 var initState = {
-  photos: [], 
+  photos: {}, 
   rightwidth: 300,
   displaymode: 'camera'
 }
@@ -43,13 +43,12 @@ function render (state) {
     var data = dataurl.replace(/^.+,/g, "");
     var time = new Date().toISOString();
     var w = db.put(time, data, function(){
+      loop.state.photos[randombytes(16).toString('hex')] = {
+        'time': time,
+        'data': data
+      };
+      loop.update(loop.state);
     }); 
-    loop.state.photos.push({
-      'id': randombytes(16).toString('hex'),
-      'time': time,
-      'data': data
-    });
-    loop.update(loop.state);
   };
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -106,11 +105,11 @@ function render (state) {
       ]),
     ]),
     h('div#right', {style : {width: state.rightwidth } }, [
-      h('div', state.photos.map(function(p){
+      h('div', Object.keys(state.photos).map(function(p){
         return h('div', [
          // h('a', {href: 'data:image/jpeg;base64,' + p.data}, [
             h('img', { 
-              src: 'data:image/jpeg;base64,' + p.data,
+              src: 'data:image/jpeg;base64,' + state[p].data,
               onclick: picview(),
               style: {width: '100%'}
             }),
@@ -125,10 +124,10 @@ function render (state) {
 
 db.createReadStream().pipe(through(write, end));
 function write (data) {
-  loop.state.photos.push({
-    'time': data.key,
-    'data': data.value
-  });
+    loop.state.photos[randombytes(16).toString('hex')] = {
+    'time': time,
+    'data': data
+  };
   loop.update(loop.state);
 }
 function end () {
