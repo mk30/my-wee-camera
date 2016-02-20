@@ -18,7 +18,6 @@ var createVideo = function (video) {
     video.play();
   });
 }
-function mapoverphotos (p) { state.photos.map(p)}
 /*
 var displaymodes = {
   camera: function () {},
@@ -53,20 +52,13 @@ function render (state) {
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
-  /*
-  function picview (p) {
-    return function () { h('div#picview', {}, [
+  function picview (p){
+    var url = 'data:image/jpeg;base64,' + state.photos[p].data;
+    return  h('div#picview', {}, [
       h('a', {href: '#'}, [
-        h('img', {src:  
-          'data:image/jpeg;base64,' + p.data
-        }),
+        h('img', {src: url}),
       ]),
     ])
-  }}
-  */
-  function picview (state, url){
-    
-
   }
   function rendercam () {
     return h('video', {
@@ -84,6 +76,19 @@ function render (state) {
       }
     })
   }
+  function clicked () {
+      loop.state.displaymode = 'display';
+      loop.update(loop.state);
+      console.log(loop.state.displaymode)
+  }
+  var maindisplay
+  if (state.displaymode == 'camera'){
+    maindisplay = rendercam()
+  }
+  else if (state.displaymode == 'display'){
+    maindisplay = picview()
+  }
+      //flow control based on loop.state.displaymode('display') goes here
   return h('div#wrapper', [
     h('div#top', { }, [
       'my wee camera'
@@ -94,7 +99,7 @@ function render (state) {
           window.innerWidth - state.rightwidth- 20
       }
     }, [
-      rendercam (),
+      maindisplay,
       h('div#buttons', { }, [
         h('button', { 
           onclick: takepic,
@@ -106,27 +111,22 @@ function render (state) {
     ]),
     h('div#right', {style : {width: state.rightwidth } }, [
       h('div', Object.keys(state.photos).map(function(p){
-        console.log(Object.keys(state.photos));
-        console.log(state.photos[p].data);
         return h('div', [
-         // h('a', {href: 'data:image/jpeg;base64,' + p.data}, [
-            h('img', { 
-              src: 'data:image/jpeg;base64,' + state.photos[p].data,
-              onclick: picview(),
-              style: {width: '100%'}
-            }),
-          //]),
-          h('div', 'id: ' + p.id)
+          h('img', { 
+            src: 'data:image/jpeg;base64,' + state.photos[p].data,
+            onclick: clicked,
+            style: {width: '100%'}
+          }),
+          h('div', 'id: ' + p)
         ])
       }))
     ])  
   ]);
 }
 
-
 db.createReadStream().pipe(through(write, end));
 function write (data) {
-    loop.state.photos[randombytes(16).toString('hex')] = {
+  loop.state.photos[randombytes(16).toString('hex')] = {
     'time': data.key,
     'data': data.value
   };
