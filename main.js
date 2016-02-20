@@ -42,13 +42,13 @@ function render (state) {
     var dataurl = canvas.toDataURL();
     var data = dataurl.replace(/^.+,/g, "");
     var time = new Date().toISOString();
-    var w = db.put(time, data, function(){
-      loop.state.photos[randombytes(16).toString('hex')] = {
-        'time': time,
-        'data': data
-      };
-      loop.update(loop.state);
-    }); 
+    var w = db.put(time, data, function(){}); 
+    var rand = randombytes(16).toString('hex');
+    loop.state.photos[rand] = {
+      'time': time,
+      'data': data
+    };
+    loop.update(loop.state);
   };
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -106,10 +106,12 @@ function render (state) {
     ]),
     h('div#right', {style : {width: state.rightwidth } }, [
       h('div', Object.keys(state.photos).map(function(p){
+        console.log(Object.keys(state.photos));
+        console.log(state.photos[p].data);
         return h('div', [
          // h('a', {href: 'data:image/jpeg;base64,' + p.data}, [
             h('img', { 
-              src: 'data:image/jpeg;base64,' + state[p].data,
+              src: 'data:image/jpeg;base64,' + state.photos[p].data,
               onclick: picview(),
               style: {width: '100%'}
             }),
@@ -125,8 +127,8 @@ function render (state) {
 db.createReadStream().pipe(through(write, end));
 function write (data) {
     loop.state.photos[randombytes(16).toString('hex')] = {
-    'time': time,
-    'data': data
+    'time': data.key,
+    'data': data.value
   };
   loop.update(loop.state);
 }
