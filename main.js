@@ -18,12 +18,6 @@ var createVideo = function (video) {
     video.play();
   });
 }
-/*
-var displaymodes = {
-  camera: function () {},
-  display: function () {}
-}
-*/
 
 var initState = {
   photos: {}, 
@@ -52,11 +46,14 @@ function render (state) {
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
-  function picview (p){
-    var url = 'data:image/jpeg;base64,' + state.photos[p].data;
+  function picview (photoid){
+    console.log(photoid)
+    var url = 'data:image/jpeg;base64,' 
+      + state.photos[photoid].data;
     return  h('div#picview', {}, [
       h('a', {href: '#'}, [
-        h('img', {src: url}),
+        h('img', {src: 'data:image/jpeg;base64,' 
+          + state.photos[photoid].data}),
       ]),
     ])
   }
@@ -76,17 +73,17 @@ function render (state) {
       }
     })
   }
-  function clicked () {
+  function clicked (photoid) {
       loop.state.displaymode = 'display';
+      loop.state.currentphoto = photoid;
       loop.update(loop.state);
-      console.log(loop.state.displaymode)
   }
   var maindisplay
   if (state.displaymode == 'camera'){
     maindisplay = rendercam()
   }
   else if (state.displaymode == 'display'){
-    maindisplay = picview()
+    maindisplay = picview(loop.state.currentphoto)
   }
       //flow control based on loop.state.displaymode('display') goes here
   return h('div#wrapper', [
@@ -114,7 +111,7 @@ function render (state) {
         return h('div', [
           h('img', { 
             src: 'data:image/jpeg;base64,' + state.photos[p].data,
-            onclick: clicked,
+            onclick: function(e){clicked(p)},
             style: {width: '100%'}
           }),
           h('div', 'id: ' + p)
