@@ -2,6 +2,7 @@ var vdom = require('virtual-dom')
 var h = require('virtual-hyperscript-hook')(vdom.h)
 var main = require("main-loop")
 var getMedia = require('getusermedia');
+var randombytes = require('randombytes');
 var video
 var canvas = document.createElement('canvas');
 var capture = document.querySelector('#capture');
@@ -17,6 +18,7 @@ var createVideo = function (video) {
     video.play();
   });
 }
+function mapoverphotos (p) { state.photos.map(p)}
 /*
 var displaymodes = {
   camera: function () {},
@@ -43,6 +45,7 @@ function render (state) {
     var w = db.put(time, data, function(){
     }); 
     loop.state.photos.push({
+      'id': randombytes(16).toString('hex'),
       'time': time,
       'data': data
     });
@@ -51,8 +54,8 @@ function render (state) {
   function camview () {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
+  /*
   function picview (p) {
-  //the below does not work
     return function () { h('div#picview', {}, [
       h('a', {href: '#'}, [
         h('img', {src:  
@@ -61,6 +64,11 @@ function render (state) {
       ]),
     ])
   }}
+  */
+  function picview (state, url){
+    
+
+  }
   function rendercam () {
     return h('video', {
       width: 600,
@@ -103,11 +111,11 @@ function render (state) {
          // h('a', {href: 'data:image/jpeg;base64,' + p.data}, [
             h('img', { 
               src: 'data:image/jpeg;base64,' + p.data,
-              onclick: picview(p),
+              onclick: picview(),
               style: {width: '100%'}
             }),
           //]),
-          h('div', 'date: ' + p.time)
+          h('div', 'id: ' + p.id)
         ])
       }))
     ])  
