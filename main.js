@@ -43,11 +43,9 @@ function render (state) {
     };
     loop.update(loop.state);
   };
-  function camview () {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  }
   function picview (photoid){
     console.log(photoid)
+    video = null
     var url = 'data:image/jpeg;base64,' 
       + state.photos[photoid].data;
     return  h('div#picview', {}, [
@@ -74,18 +72,22 @@ function render (state) {
     })
   }
   function clicked (photoid) {
-      loop.state.displaymode = 'display';
-      loop.state.currentphoto = photoid;
-      loop.update(loop.state);
+    loop.state.displaymode = 'display';
+    loop.state.currentphoto = photoid;
+    loop.update(loop.state);
+  }
+  function returntocamview () {
+    loop.state.displaymode = 'camera';
+    loop.update(loop.state);
+    console.log(loop.state.displaymode)
   }
   var maindisplay
   if (state.displaymode == 'camera'){
-    maindisplay = rendercam()
+    maindisplay = rendercam(state)
   }
   else if (state.displaymode == 'display'){
     maindisplay = picview(loop.state.currentphoto)
   }
-      //flow control based on loop.state.displaymode('display') goes here
   return h('div#wrapper', [
     h('div#top', { }, [
       'my wee camera'
@@ -102,7 +104,7 @@ function render (state) {
           onclick: takepic,
         }, 'take a picture'),
         h('button', { 
-          onclick: camview,
+          onclick: function(){returntocamview()},
         }, 'return to camera view'),
       ]),
     ]),
