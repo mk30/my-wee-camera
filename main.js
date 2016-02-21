@@ -43,6 +43,14 @@ function render (state) {
     };
     loop.update(loop.state);
   };
+  function deletepic () {
+    var w = db.del(time); 
+    loop.state.photos[rand] = {
+      'time': time,
+      'data': data
+    };
+    loop.update(loop.state);
+  };
   function picview (photoid){
     console.log(photoid)
     video = null
@@ -117,7 +125,16 @@ function render (state) {
             onclick: function(e){clicked(p)},
             style: {width: '100%'}
           }),
-          h('div', 'hi')
+          h('div', [
+            h('button', { 
+              onclick:
+                function(e){
+                  db.del(state.photos[p].time),
+                  delete state.photos[p],
+                  loop.update(loop.state)
+                }
+            }, 'delete the above image'),
+          ])
         ])
       }))
     ])  
