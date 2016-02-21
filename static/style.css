@@ -1,34 +1,45 @@
 html, body{
   height:100%;
+  margin: 0;
 }
 #wrapper {
     position: absolute;
     top: 0;
     left: 0;
+    bottom: 0;
     margin: 0;
-    background: LightBlue;
+    background: Orange;
 }
 #top{
-  width: '100%',
-  'border-bottom': '1px solid #000000',
-  background: 'Lavender'
-
+  width: 100%;
+  border-bottom: 1px solid SpringGreen;
+  font-family: monospace;
+  padding: 5px;
 }
 #left{
     float: left;
     clear: both;
 }
 #right{
-    float: left;
-    background: PaleGreen;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: SpringGreen;
+    overflow-y: scroll;
+    border-left: 1px solid SpringGreen;
 }
 #buttons{
-  'clear': 'both',
-  'width': '100%',
-  'padding': '10px' 
+  clear: both;
+  width: 50%;
+  margin: 0 auto;
 }
 #picview{
-  'width': '600px',
-  'height': '400px',
-  'padding': '10px'
+  width: 600px;
+  height: 400px;
+  padding: 10px;
+}
+button{
+  padding: 3px;
+  margin: 3px;
 }

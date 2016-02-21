@@ -61,6 +61,7 @@ function render (state) {
       height: 400, 
       style: {
         'padding': '10px',
+        'margin': '0 auto',
       },
       hook: function (elem){
         if (video) return; 
@@ -95,7 +96,7 @@ function render (state) {
     h('div#left', {
       style: {
         width: 
-          window.innerWidth - state.rightwidth- 20
+          window.innerWidth - state.rightwidth
       }
     }, [
       maindisplay,
@@ -116,7 +117,7 @@ function render (state) {
             onclick: function(e){clicked(p)},
             style: {width: '100%'}
           }),
-          h('div', 'id: ' + p)
+          h('div', 'hi')
         ])
       }))
     ])  
