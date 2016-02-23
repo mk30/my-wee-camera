@@ -2,7 +2,7 @@
   "scripts": {
     "start": "node server.js",
     "watch": "watchify main.js -o static/bundle.js -dv",
-    "build": "browserify main.js -o static/bundle.js"
+    "build": "browserify main.js | uglifyjs > static/bundle.js"
   },
   "dependencies": {
     "browserify": "^13.0.0",
@@ -15,10 +15,11 @@
     "through2": "^2.0.1",
     "virtual-dom": "^2.1.1",
     "virtual-hyperscript-hook": "^1.0.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "uglify-js": "^2.6.1"
   },
   "name": "my-wee-camera",
-  "description": "# get started",
+  "description": "screenshots in the browser",
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {},

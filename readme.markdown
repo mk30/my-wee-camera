@@ -1,6 +1,11 @@
-# video-filter-demo
+# my-wee-camera
 
-# get started
+browser-based webcam screenshots that live only in your
+browser.
+
+demo: https://kitties.neocities.org/camra.html
+
+# if you'd like to try it yourself
 
 ```
 $ npm install
